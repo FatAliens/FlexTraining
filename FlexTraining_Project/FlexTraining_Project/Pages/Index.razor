@@ -1,0 +1,99 @@
+﻿@page "/"
+<Div Margin=Margin.Is2>
+    <RadioGroup TValue=string Buttons @bind-CheckedValue=_selectedJustifyContent Color=Color.Primary>
+        @foreach (var value in _valuesJustifyContent)
+        {
+            <Radio TValue=string Value=value>@value</Radio>
+        }
+    </RadioGroup>
+    <Paragraph>Justify-content: @_selectedJustifyContent</Paragraph>
+
+    <RadioGroup TValue=string Buttons @bind-CheckedValue=_selectedAlignItems Color=Color.Primary>
+        @foreach (var value in _valuesAlignItems)
+        {
+            <Radio TValue=string Value=value>@value</Radio>
+        }
+    </RadioGroup>
+    <Paragraph>Align-items: @_selectedAlignItems</Paragraph>
+
+    <RadioGroup TValue=string Buttons @bind-CheckedValue=_selectedFlexDirection Color=Color.Primary>
+        @foreach (var value in _valuesFlexDirection)
+        {
+            <Radio TValue=string Value=value>@value</Radio>
+        }
+    </RadioGroup>
+    <Paragraph>Flex-direction: @_selectedFlexDirection</Paragraph>
+
+    <RadioGroup TValue=string Buttons @bind-CheckedValue=_selectedFlexWrap Color=Color.Primary>
+        @foreach (var value in _valuesFlexWrap)
+        {
+            <Radio TValue=string Value=value>@value</Radio>
+        }
+    </RadioGroup>
+    <Paragraph>Flex-Wrap: @_selectedFlexWrap</Paragraph>
+
+    <Buttons>
+        <Button Color=Color.Danger Clicked=AddRedBlock>Добавать красный блок</Button>
+        <Button Color=Color.Success Clicked=AddGreenBlock>Добавать зеленый блок</Button>
+        <Button Color=Color.Primary Clicked=AddBlueBlock>Добавать синий блок</Button>
+    </Buttons>
+    <Button Color=Color.Warning Clicked=RemoveLastBlock>Удалить последний блок</Button>
+</Div>
+<div style=@_containerStyles class="container">
+    @foreach (var block in _blocks)
+    {
+        <div class=@block.Color></div>
+    }
+</div>
+
+@code
+{
+    class Block
+    {
+        public string Color { get; set; }
+    }
+
+    private List<Block> _blocks = new List<Block>();
+
+    private string _containerStyles => $"justify-content: {_selectedJustifyContent}; align-items: {_selectedAlignItems}; flex-direction: {_selectedFlexDirection}; flex-wrap: {_selectedFlexWrap};";
+
+    private string _selectedJustifyContent = "flex-start";
+    private string[] _valuesJustifyContent = { "flex-start", "flex-end", "center", "space-around", "space-between" };
+
+    private string _selectedAlignItems = "flex-start";
+    private string[] _valuesAlignItems = { "flex-start", "flex-end", "center" };
+
+    private string _selectedFlexDirection = "row";
+    private string[] _valuesFlexDirection = { "row", "row-reverse", "column", "column-reverse" };
+
+    private string _selectedFlexWrap = "nowrap";
+    private string[] _valuesFlexWrap = { "nowrap", "wrap", "wrap-reverse" };
+
+    private void AddRedBlock()
+    {
+        AddBlock("red");
+    }
+
+    private void AddGreenBlock()
+    {
+        AddBlock("green");
+    }
+
+    private void AddBlueBlock()
+    {
+        AddBlock("blue");
+    }
+
+    private void AddBlock(string color)
+    {
+        _blocks.Add(new Block { Color = color });
+    }
+
+    private void RemoveLastBlock()
+    {
+        if (_blocks.Count > 0)
+        {
+            _blocks.Remove(_blocks.Last());
+        }
+    }
+}
